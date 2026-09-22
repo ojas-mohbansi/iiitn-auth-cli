@@ -8,10 +8,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const bin = path.resolve(__dirname, '..', 'dist', 'index.js');
+const bin = path.resolve(__dirname, '..', 'build', 'index.js');
 
 if (!fs.existsSync(bin)) {
-  console.error(`chmod-bin: dist/index.js not found at ${bin}`);
+  console.error(`chmod-bin: build/index.js not found at ${bin}`);
   process.exit(1);
 }
 

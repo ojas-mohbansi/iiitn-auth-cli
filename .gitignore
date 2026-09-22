@@ -1,5 +1,8 @@
 # Build output
 node_modules/
+build/
+
+# Compiled dist/ (old name — keep ignored so old artifacts don't sneak in)
 dist/
 
 # Credential and key files (never commit these)

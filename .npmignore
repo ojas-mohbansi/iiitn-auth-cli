@@ -1,4 +1,4 @@
-# Source — compiled output in dist/ is what gets published
+# Source — compiled output in build/ is what gets published
 src/
 tsconfig.json
 
@@ -13,7 +13,7 @@ jest-*.txt
 
 # Build / CI artefacts
 coverage/
-dist/**/*.map
+build/**/*.map
 
 # Replit / misc dev environments
 .replit

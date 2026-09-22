@@ -2,23 +2,23 @@
   "name": "iiitn-auth-cli",
   "version": "1.1.0",
   "description": "Automatic authenticator for the IIITN Fortinet captive portal — headless, secure, and daemon-capable.",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "require": "./build/index.js",
+      "import": "./build/index.js",
+      "default": "./build/index.js"
     }
   },
   "sideEffects": false,
   "bin": {
-    "iiitn-auth-cli": "dist/index.js"
+    "iiitn-auth-cli": "build/index.js"
   },
   "scripts": {
     "build": "tsc && node scripts/chmod-bin.js",
     "dev": "ts-node src/index.ts",
-    "start": "node dist/index.js",
-    "clean": "rm -rf dist",
+    "start": "node build/index.js",
+    "clean": "node -e \"const fs=require('fs');const p='build';if(fs.existsSync(p))fs.rmSync(p,{recursive:true,force:true})\"",
     "rebuild": "npm run clean && npm run build",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",
@@ -81,7 +81,7 @@
     "typescript": "^5.5.3"
   },
   "files": [
-    "dist/",
+    "build/",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
