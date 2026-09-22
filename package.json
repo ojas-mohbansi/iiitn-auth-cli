@@ -1,6 +1,6 @@
 {
   "name": "iiitn-auth-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Automatic authenticator for the IIITN Fortinet captive portal — headless, secure, and daemon-capable.",
   "main": "build/index.js",
   "exports": {

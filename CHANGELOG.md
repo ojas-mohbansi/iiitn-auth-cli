@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.2.1] - 2026-09-23
+
+### Fixed
+- `connect` command no longer attempts to POST to the portal when no captive portal
+  is detected — it now reports "Already online" and exits cleanly instead of
+  timing out with 5 retries against `172.16.0.30`
+
 ## [1.2.0] - 2026-09-23
 
 ### Added
@@ -70,6 +77,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[1.2.1]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/releases/tag/v1.0.0

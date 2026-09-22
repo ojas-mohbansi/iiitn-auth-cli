@@ -19,7 +19,7 @@ export async function connectCommand(): Promise<ExitCode> {
     return ExitCode.NO_CREDENTIALS;
   }
 
-  const spinner = ora('Detecting portal…').start();
+  const spinner = ora('Checking for captive portal…').start();
 
   let portalInfo;
   try {
@@ -29,17 +29,14 @@ export async function connectCommand(): Promise<ExitCode> {
     return ExitCode.ERROR;
   }
 
+  // No portal detected — internet is already up, nothing to do.
   if (!portalInfo.isPortal) {
-    spinner.info('No captive portal detected — you may already be online.');
-    spinner.start('Attempting authentication anyway…');
-    portalInfo = {
-      isPortal: true,
-      loginUrl: `${cfg.portalBaseUrl}${cfg.loginPath}`,
-    };
-  } else {
-    // istanbul ignore next
-    spinner.text = `Portal found at ${portalInfo.portalUrl ?? portalInfo.loginUrl} — connecting…`;
+    spinner.succeed('Already online — no captive portal detected.');
+    console.log(chalk.dim('  Nothing to authenticate. Run `iiitn-auth-cli daemon` to monitor continuously.'));
+    return ExitCode.OK;
   }
+
+  spinner.text = `Portal found at ${portalInfo.portalUrl ?? portalInfo.loginUrl} — connecting…`;
 
   const result = await withRetry(
     async () => {
