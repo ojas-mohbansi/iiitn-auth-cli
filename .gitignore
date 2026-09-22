@@ -1,0 +1,47 @@
+# Build output
+node_modules/
+dist/
+
+# Credential and key files (never commit these)
+.iiitn-auth-cli/
+*.key
+*.creds
+
+# Logs
+*.log
+*.err
+logs/
+reports/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# npm pack artefacts
+*.tgz
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Jest output artifacts
+jest-*.txt
+jest-output.txt

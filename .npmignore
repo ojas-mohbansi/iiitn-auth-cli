@@ -1,0 +1,42 @@
+# Source — compiled output in dist/ is what gets published
+src/
+tsconfig.json
+
+# Development tooling
+.github/
+.changeset/
+.kiro/
+scripts/
+tests/
+jest.config.js
+jest-*.txt
+
+# Build / CI artefacts
+coverage/
+dist/**/*.map
+
+# Replit / misc dev environments
+.replit
+replit.nix
+.upm/
+.local/
+.agents/
+
+# Logs and temp files
+*.log
+*.err
+reports/
+
+# Credentials and keys (safety net — should never be present anyway)
+.iiitn-auth-cli/
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
