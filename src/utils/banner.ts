@@ -25,7 +25,8 @@ export function printBanner(version: string): void {
   console.log(labelRow('Made by', chalk.white.bold('Ojas S.K Mohbansi')));
   console.log(labelRow('Portal', chalk.dim('Fortinet / FortiGate (HTTPS)')));
   console.log(labelRow('Credential storage', chalk.dim('OS Keychain + AES-256-GCM fallback')));
-  console.log(labelRow('Platform', chalk.dim('Linux  ·  macOS  ·  Windows (WSL)')));
+  console.log(labelRow('Platform', chalk.dim('Linux  ·  macOS  ·  Windows')));
   console.log(bottom());
   console.log('');
 }
+

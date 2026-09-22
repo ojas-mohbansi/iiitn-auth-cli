@@ -7,6 +7,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.2.0] - 2026-09-23
+
+### Added
+- `crispr` command — opens the rCRISPR IIITN CRISPR Club FTP site (`https://crispr.iiitn.ac.in/`) in the default browser; available as both a CLI subcommand and a TUI menu entry under the new **Connect & Resources** section
+- `scripts/postinstall.js` — prints actionable guidance after install: local installs are directed to `npx iiitn-auth-cli`; global installs on Windows include the exact PowerShell one-liner to add `%APPDATA%\npm` to the user PATH
+- `scripts/copy-readme.js` — copies `README.md` into `build/` at build time so the packaged `help` command can resolve it correctly at runtime
+- `open@8` dependency — cross-platform default-browser launcher (CJS-compatible)
+
+### Fixed
+- `help` command no longer prints "README.md not found" after a global install — `build/README.md` is now included in the published package
+- `login` command no longer times out when no captive portal is detected; instead it prompts the user to confirm saving credentials without portal verification
+- `login` command now exits cleanly with a "Login cancelled." message when Ctrl+C is pressed during credential prompts instead of crashing silently
+- Banner platform label updated from `Windows (WSL)` to `Windows`
+
 ## [1.1.0] - 2026-09-22
 
 ### Added
@@ -56,5 +70,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[1.2.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/releases/tag/v1.0.0

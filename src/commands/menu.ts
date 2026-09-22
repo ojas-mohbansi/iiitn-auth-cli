@@ -12,6 +12,7 @@ import { helpCommand } from './help';
 import { exportLogsCommand } from './export-logs';
 import { uninstallCommand } from './uninstall';
 import { completionCommand } from './completion';
+import { crispRCommand } from './crispr';
 import { ExitCode } from '../types/index';
 
 function printMenuHeader(): void {
@@ -28,6 +29,9 @@ function printMenuHeader(): void {
   console.log(menuItemRow('daemon', 'Run continuous monitor (blocks until stopped)'));
   console.log(menuItemRow('enable-autostart', 'Configure daemon to start at system boot'));
   console.log(menuItemRow('disable-autostart', 'Remove autostart configuration'));
+  console.log(hRule());
+  console.log(sectionRow('Connect & Resources'));
+  console.log(menuItemRow('crispr', 'Open rCRISPR — IIITN CRISPR Club FTP site'));
   console.log(hRule());
   console.log(sectionRow('Configuration & Help'));
   console.log(menuItemRow('config', 'View or modify configuration values'));
@@ -52,6 +56,8 @@ const CHOICES = [
   { name: `${chalk.green.bold('daemon')}          Run continuous monitor`, value: 'daemon' },
   { name: `${chalk.green.bold('enable-autostart')} Start daemon at boot`, value: 'enable-autostart' },
   { name: `${chalk.green.bold('disable-autostart')} Remove autostart`, value: 'disable-autostart' },
+  new inquirer.Separator(chalk.dim('─── Connect & Resources ─────────────────────')),
+  { name: `${chalk.green.bold('crispr')}          Open rCRISPR FTP site in browser`, value: 'crispr' },
   new inquirer.Separator(chalk.dim('─── Config & Help ───────────────────────────')),
   { name: `${chalk.green.bold('config')}          View or modify configuration`, value: 'config' },
   { name: `${chalk.green.bold('export-logs')}     Export diagnostic report`, value: 'export-logs' },
@@ -73,25 +79,26 @@ export async function showMenu(): Promise<ExitCode> {
       message:
         chalk.cyan('Select a command') + chalk.dim(' (↑↓ arrow keys, Enter to confirm)'),
       choices: CHOICES,
-      pageSize: 18,
+      pageSize: 20,
     },
   ]);
 
   console.log('');
 
   switch (choice) {
-    case 'login':            return await loginCommand({});
-    case 'logout':           return await logoutCommand();
-    case 'status':           return await statusCommand();
-    case 'connect':          return await connectCommand();
-    case 'daemon':           return await daemonCommand({});
-    case 'enable-autostart': return await enableAutostartCommand();
-    case 'disable-autostart':return await disableAutostartCommand();
-    case 'config':           return await configCommand({});
-    case 'export-logs':      return await exportLogsCommand({});
-    case 'help':             return await helpCommand();
-    case 'uninstall':        return await uninstallCommand();
-    case 'completion':       return await completionCommand('bash');
+    case 'login':             return await loginCommand({});
+    case 'logout':            return await logoutCommand();
+    case 'status':            return await statusCommand();
+    case 'connect':           return await connectCommand();
+    case 'daemon':            return await daemonCommand({});
+    case 'enable-autostart':  return await enableAutostartCommand();
+    case 'disable-autostart': return await disableAutostartCommand();
+    case 'crispr':            return await crispRCommand();
+    case 'config':            return await configCommand({});
+    case 'export-logs':       return await exportLogsCommand({});
+    case 'help':              return await helpCommand();
+    case 'uninstall':         return await uninstallCommand();
+    case 'completion':        return await completionCommand('bash');
     case 'exit':
       console.log(chalk.dim('  Goodbye.\n'));
       return ExitCode.OK;

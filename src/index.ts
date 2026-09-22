@@ -13,6 +13,7 @@ import { exportLogsCommand } from './commands/export-logs';
 import { showMenu } from './commands/menu';
 import { uninstallCommand } from './commands/uninstall';
 import { completionCommand } from './commands/completion';
+import { crispRCommand } from './commands/crispr';
 import { printBanner } from './utils/banner';
 import { checkForUpdate } from './utils/update-check';
 import { ExitCode } from './types/index';
@@ -139,6 +140,14 @@ program
     process.exit(code ?? ExitCode.OK);
   });
 
+
+program
+  .command('crispr')
+  .description('Open the rCRISPR IIITN CRISPR Club FTP site in your browser')
+  .action(async () => {
+    const code = await crispRCommand();
+    process.exit(code ?? ExitCode.OK);
+  });
 program.addHelpText(
   'after',
   `
@@ -161,3 +170,5 @@ if (process.argv.length > 2) {
 }
 
 program.parseAsync(process.argv).catch(() => process.exit(ExitCode.ERROR));
+
+
