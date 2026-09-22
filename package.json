@@ -43,7 +43,7 @@
   "homepage": "https://github.com/ojas-mohbansi/iiitn-auth-cli#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ojas-mohbansi/iiitn-auth-cli.git"
+    "url": "git+https://github.com/ojas-mohbansi/iiitn-auth-cli.git"
   },
   "bugs": {
     "url": "https://github.com/ojas-mohbansi/iiitn-auth-cli/issues"
