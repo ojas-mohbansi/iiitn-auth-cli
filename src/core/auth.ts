@@ -7,6 +7,8 @@ import { getConfig } from '../utils/config';
 import { debug, info, warn, error } from '../utils/logger';
 import { Credentials, AuthResult, PortalInfo } from '../types/index';
 
+
+const PORTAL_AGENT = new https.Agent({ rejectUnauthorized: false });
 const USER_AGENT =
   'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
 
@@ -48,6 +50,7 @@ export async function performLogin(creds: Credentials, portal: PortalInfo): Prom
       },
       validateStatus: () => true,
       maxRedirects: 10,
+      httpsAgent: PORTAL_AGENT,
     });
 
     const responseText = typeof resp.data === 'string' ? resp.data : '';
@@ -150,3 +153,4 @@ export async function performLogout(portalBaseUrl: string): Promise<boolean> {
     return false;
   }
 }
+

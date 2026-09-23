@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.2.2] - 2026-09-23
+
+### Fixed
+- Portal detection no longer crashes with "axios-cookiejar-support does not support
+  for use with other http(s).Agent" — switched from `axios-cookiejar-support` wrapper
+  to `http-cookie-agent` directly, combining cookie jar + `rejectUnauthorized: false`
+  in a single agent so both work simultaneously
+- Self-signed certificate errors on the Fortinet portal are now handled — the HTTP
+  client used for portal detection, login, and keepalive all accept self-signed certs
+- Portal detection no longer misidentifies `connectivitycheck.gstatic.com` as the
+  portal URL when Fortinet intercepts and redirects it — the actual portal IP/URL
+  is now correctly extracted from the redirect chain
+
 ## [1.2.1] - 2026-09-23
 
 ### Fixed
@@ -77,6 +90,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+[1.2.2]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ojas-mohbansi/iiitn-auth-cli/compare/v1.0.0...v1.1.0
