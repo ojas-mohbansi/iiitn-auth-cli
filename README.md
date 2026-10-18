@@ -158,3 +158,57 @@ Both are available via npm and installed automatically when you install the pack
 ## License
 
 MIT
+
+## Publishing
+
+The package is published to both the **npm registry** and **GitHub Packages** as `@ojas-mohbansi/iiitn-auth-cli`.
+
+### Automated (GitHub Actions)
+
+Publishing is triggered automatically when you create a GitHub Release:
+
+```bash
+# 1. Bump the version
+npm version patch   # or minor / major
+
+# 2. Push the commit and the new tag
+git push origin main --tags
+
+# 3. Go to GitHub → Releases → Draft a new release → pick the tag → Publish release
+```
+
+The workflow (`.github/workflows/publish.yml`) runs two parallel jobs — one for npm, one for GitHub Packages.
+
+**Required secret:** Add an `NPM_TOKEN` (npm Automation token) to your repo's Settings → Secrets and variables → Actions. `GITHUB_TOKEN` is provided automatically by GitHub Actions.
+
+### Manual publish
+
+#### To npm registry
+
+```bash
+# Log in once (stores credentials in ~/.npmrc)
+npm login
+
+# Publish
+npm publish --access public
+```
+
+#### To GitHub Packages
+
+```bash
+# Set your GitHub Personal Access Token (needs write:packages scope)
+export NODE_AUTH_TOKEN=ghp_your_token_here
+
+# Publish (the .npmrc in the repo routes @ojas-mohbansi to GitHub Packages)
+npm publish
+```
+
+#### Version bump reminder
+
+Always bump the version before re-publishing — both registries reject duplicate versions:
+
+```bash
+npm version patch   # 1.0.0 → 1.0.1
+npm version minor   # 1.0.0 → 1.1.0
+npm version major   # 1.0.0 → 2.0.0
+```

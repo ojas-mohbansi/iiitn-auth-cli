@@ -1,5 +1,25 @@
-# The Remotion launch film is a separate, self-contained project.
-video/
+# Version control
+.git/
+.gitignore
 
-# Local agent/tooling metadata.
+# GitHub Actions / CI
+.github/
+
+# Editor & OS artifacts
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Systemd service file (not needed in npm package)
+authbahn.service
+
+# Local agent/tooling metadata
 .freebuff/
+.kiro/
+
+# Remotion / video assets (separate project)
+video/
