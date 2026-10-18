@@ -1,0 +1,14 @@
+[Unit]
+Description=iiitn-auth-cli Authentication Daemon
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/iiitn-auth-cli --start
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

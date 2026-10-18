@@ -1,0 +1,5 @@
+# The Remotion launch film is a separate, self-contained project.
+video/
+
+# Local agent/tooling metadata.
+.freebuff/
