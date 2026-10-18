@@ -1,17 +1,17 @@
 {
   "name": "@ojas-mohbansi/iiitn-auth-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI tool for IITN AuthBahn authentication (replicates browser extension)",
   "main": "auth.js",
   "bin": {
-    "iiitn-auth-cli": "auth.js"
+    "iiitn-auth-cli": "cli.js"
   },
   "scripts": {
-    "setup": "node auth.js --setup",
-    "start": "node auth.js --start",
-    "status": "node auth.js --status",
-    "logout": "node auth.js --logout",
-    "log": "node auth.js --log"
+    "setup": "node cli.js --setup",
+    "start": "node cli.js --start",
+    "status": "node cli.js --status",
+    "logout": "node cli.js --logout",
+    "log": "node cli.js --log"
   },
   "dependencies": {
     "axios": "1.20.0"
