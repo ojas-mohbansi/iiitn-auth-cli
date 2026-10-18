@@ -1,6 +1,6 @@
 {
   "name": "@ojas-mohbansi/iiitn-auth-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI tool for IITN AuthBahn authentication (replicates browser extension)",
   "main": "auth.js",
   "bin": {
