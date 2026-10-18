@@ -1,48 +1,62 @@
 # iiitn-auth-cli
 
-CLI tool for IITN AuthBahn authentication (replicates the CRISPR AuthBahn browser extension).
+CLI tool for IITN AuthBahn authentication — replicates the CRISPR AuthBahn browser extension behaviour so you can authenticate from a terminal or run it as a background service.
+
+[![npm](https://img.shields.io/npm/v/@ojas-mohbansi/iiitn-auth-cli)](https://www.npmjs.com/package/@ojas-mohbansi/iiitn-auth-cli)
+[![GitHub Packages](https://img.shields.io/badge/GitHub%20Packages-@ojas--mohbansi%2Fiiitn--auth--cli-blue)](https://github.com/ojas-mohbansi/iiitn-auth-cli/packages)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
 
 ## Installation
 
-### Global install (provides `iiitn-auth-cli` command)
+**Prerequisites:** Node.js v20+
+
+### Global install (recommended)
+
+Installs the `iiitn-auth-cli` command globally.
 
 ```bash
-npm install -g iiitn-auth-cli
+npm install -g @ojas-mohbansi/iiitn-auth-cli
 ```
 
-### Local install + symlink
+### From GitHub Packages
 
 ```bash
-npm install iiitn-auth-cli
-cd iiitn-auth-cli
-npm link
+npm install -g @ojas-mohbansi/iiitn-auth-cli --registry https://npm.pkg.github.com
 ```
 
-### Prerequisites
+### Install locally in a project
 
-- Node.js v20+ (required by the package engines field)
-- npm (comes with Node.js)
+```bash
+npm install @ojas-mohbansi/iiitn-auth-cli
+npx iiitn-auth-cli --setup
+```
+
+---
 
 ## Quick Start
 
-### 1. First-time setup (interactive)
+### 1. First-time setup
 
 ```bash
 iiitn-auth-cli --setup
 ```
 
-You'll be prompted to:
-- Enter your username
-- Enter your password
-- Choose whether to encrypt the password storage (base64 encoding)
+You'll be prompted for:
+- Username
+- Password
+- Whether to base64-encode the stored password (basic obfuscation)
 
-### 2. Start the authentication loop
+Credentials are saved to `~/.authbahn/config.json`.
+
+### 2. Start the auth loop
 
 ```bash
 iiitn-auth-cli --start
 ```
 
-This runs the auth loop in the foreground, monitoring the keepalive endpoint every 60 seconds and auto-reconnecting on session expiry. Press Ctrl+C to stop.
+Logs in and then pings the keepalive endpoint every 60 seconds. Re-authenticates automatically if the session drops. Press `Ctrl+C` to stop.
 
 ### 3. Check status
 
@@ -50,51 +64,71 @@ This runs the auth loop in the foreground, monitoring the keepalive endpoint eve
 iiitn-auth-cli --status
 ```
 
-Displays:
-- Your username (from config)
-- Whether credentials are configured
-- Current keepalive connection status
+Prints your configured username and a live keepalive check result (`CONNECTED` / `DISCONNECTED`).
 
-### 4. Force logout
+### 4. Logout
 
 ```bash
 iiitn-auth-cli --logout
 ```
 
-### 5. Tail the log file
+Sends a logout request to the auth server.
+
+### 5. View logs
 
 ```bash
 iiitn-auth-cli --log
 ```
 
+Tails the last 50 lines of `~/.authbahn/authbahn.log`.
+
+---
+
+## CLI Reference
+
+| Argument   | Description                                                      |
+|------------|------------------------------------------------------------------|
+| `--setup`  | Interactive prompt to save credentials                           |
+| `--start`  | Start the auth + keepalive loop (runs until killed)              |
+| `--status` | Show username and live connection status                         |
+| `--logout` | Send a logout request to the auth server                         |
+| `--log`    | Print the last 50 lines of the log file                          |
+
+---
+
 ## Configuration
 
-- Credentials are stored at `~/.authbahn/config.json`
-- Password can be optionally base64-encrypted for basic obfuscation
-- Log file at `~/.authbahn/authbahn.log`
+| Path                        | Purpose                              |
+|-----------------------------|--------------------------------------|
+| `~/.authbahn/config.json`   | Stored credentials (username + password) |
+| `~/.authbahn/authbahn.log`  | Event log with timestamps            |
+
+Both are created automatically on first run.
+
+---
 
 ## Systemd Integration
 
-The `--start` mode is designed to run as a systemd service. To set up auto-start on boot:
+Run `--start` as a persistent background service on Linux.
 
 ```bash
-# 1. Copy the service file
-sudo cp authbahn.service /etc/systemd/system/
+# 1. Copy the bundled service file
+sudo cp $(npm root -g)/@ojas-mohbansi/iiitn-auth-cli/authbahn.service /etc/systemd/system/
 
-# 2. Reload systemd daemon
+# 2. Reload systemd
 sudo systemctl daemon-reload
 
-# 3. Enable the service to start on boot
+# 3. Enable on boot
 sudo systemctl enable authbahn.service
 
-# 4. Start the service
+# 4. Start now
 sudo systemctl start authbahn.service
 
 # 5. Check status
 sudo systemctl status authbahn.service
 ```
 
-**Service file content** (auto-generated or copy this):
+Service file (`authbahn.service`):
 
 ```ini
 [Unit]
@@ -107,112 +141,86 @@ Type=simple
 ExecStart=/usr/local/bin/iiitn-auth-cli --start
 Restart=on-failure
 RestartSec=5
-Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-## CLI Arguments
-
-| Argument | Description |
-|---|---|
-| `--setup` | Interactive prompt to create/update the config file with credentials |
-| `--start` | Start the auth loop (used by systemd, keeps running monitoring keepalive) |
-| `--status` | Check current connection status |
-| `--logout` | Send logout request if the extension supports it |
-| `--log` | Tail the log file |
+---
 
 ## How It Works
 
-### Authentication Flow (reverse-engineered from browser extension)
+### Authentication flow
 
-1. **Login**: POST form data `ft_un` (username) and `ft_pd` (password) to `https://192.168.55.253:1003/login`
-2. **Session maintenance**: After successful login, the session is maintained at `https://192.168.55.253:1003/keepalive`
-3. **Post-login redirect**: After keepalive detection, the extension redirects to `http://192.168.77.84`
-4. **Logout**: Replace "keepalive" with "logout" in the stored submitted URL
+Reverse-engineered from the CRISPR AuthBahn browser extension:
 
-### Connection Monitoring
+1. **Login** — POST `ft_un` (username) and `ft_pd` (password) as form data to `https://192.168.55.253:1003/login`
+2. **Keepalive** — GET `https://192.168.55.253:1003/keepalive` every 60 seconds to hold the session
+3. **Logout** — GET `https://192.168.55.253:1003/logout`
 
-- The auth loop pings `https://192.168.55.253:1003/keepalive` every 60 seconds
-- If the keepalive check fails (no 200 response), the connection is considered lost
-- Exponential backoff retry: 1s, 2s, 4s, 8s, 16s between reconnection attempts
-- Up to 5 retry attempts before giving up
+### Reconnection logic
 
-### Logging
+- If keepalive returns non-200, a re-login is triggered immediately
+- Exponential backoff between retries: 1s → 2s → 4s → 8s → 16s (with ±10% jitter)
+- Up to 5 consecutive failures before the daemon exits
 
-All events are logged with timestamps to `~/.authbahn/authbahn.log`:
-- Login attempts (success/failure)
-- Connection status changes
-- Re-authentication events
-- Startup and shutdown events
-- Error events
+### File layout
 
-## Dependencies
-
-- `axios` - HTTP client for making API requests
-- `colors` - Terminal color output (included via chalk in the script)
-
-Both are available via npm and installed automatically when you install the package.
-
-## License
-
-MIT
-
-## Publishing
-
-The package is published to both the **npm registry** and **GitHub Packages** as `@ojas-mohbansi/iiitn-auth-cli`.
-
-### Automated (GitHub Actions)
-
-Publishing is triggered automatically when you create a GitHub Release:
-
-```bash
-# 1. Bump the version
-npm version patch   # or minor / major
-
-# 2. Push the commit and the new tag
-git push origin main --tags
-
-# 3. Go to GitHub → Releases → Draft a new release → pick the tag → Publish release
 ```
-
-The workflow (`.github/workflows/publish.yml`) runs two parallel jobs — one for npm, one for GitHub Packages.
-
-**Required secret:** Add an `NPM_TOKEN` (npm Automation token) to your repo's Settings → Secrets and variables → Actions. `GITHUB_TOKEN` is provided automatically by GitHub Actions.
-
-### Manual publish
-
-#### To npm registry
-
-```bash
-# Log in once (stores credentials in ~/.npmrc)
-npm login
-
-# Publish
-npm publish --access public
-```
-
-#### To GitHub Packages
-
-```bash
-# Set your GitHub Personal Access Token (needs write:packages scope)
-export NODE_AUTH_TOKEN=ghp_your_token_here
-
-# Publish (the .npmrc in the repo routes @ojas-mohbansi to GitHub Packages)
-npm publish
-```
-
-#### Version bump reminder
-
-Always bump the version before re-publishing — both registries reject duplicate versions:
-
-```bash
-npm version patch   # 1.0.0 → 1.0.1
-npm version minor   # 1.0.0 → 1.1.0
-npm version major   # 1.0.0 → 2.0.0
+.
+├── auth.js      # Core auth logic (login, keepalive, backoff) — importable as a module
+├── cli.js       # CLI entry point — handles all --flags and calls auth.js
+└── authbahn.service  # Systemd unit file
 ```
 
 ---
 
-# Made By Ojas Mohbansi (BT24CSE211)
+## Dependencies
+
+| Package | Purpose                        |
+|---------|--------------------------------|
+| `axios` | HTTP client for auth requests  |
+
+---
+
+## Publishing
+
+The package is published to both **npm** and **GitHub Packages** automatically via GitHub Actions when a release is created.
+
+### Automated release
+
+```bash
+# 1. Bump the version
+npm version patch        # or minor / major
+
+# 2. Push the commit and the new tag
+git push origin main
+git push origin v<new-version>
+
+# 3. Create a GitHub release to trigger the workflow
+gh release create v<new-version> --title "v<new-version>" --generate-notes
+```
+
+The workflow (`.github/workflows/publish.yml`) runs two parallel jobs — one for npm (using `NPM_TOKEN` secret), one for GitHub Packages (using the built-in `GITHUB_TOKEN`).
+
+### Manual publish
+
+```bash
+# npm registry
+npm login
+npm publish --access public
+
+# GitHub Packages
+export NODE_AUTH_TOKEN=ghp_your_token_here
+npm publish
+```
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE)
+
+---
+
+Made by [Ojas Mohbansi](https://github.com/ojas-mohbansi) (BT24CSE211)
