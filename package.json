@@ -1,6 +1,6 @@
 {
   "name": "@ojas-mohbansi/iiitn-auth-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool for IITN AuthBahn authentication (replicates browser extension)",
   "main": "auth.js",
   "bin": {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ojas-mohbansi/iiitn-auth-cli.git"
+    "url": "git+https://github.com/ojas-mohbansi/iiitn-auth-cli.git"
   },
   "publishConfig": {
     "access": "public"
