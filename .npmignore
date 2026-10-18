@@ -1,3 +1,6 @@
+# Dependencies (never ship node_modules)
+node_modules/
+
 # Version control
 .git/
 .gitignore
