@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime / OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Local env files
+.env
+.env.*
+
+# Pack output
+*.tgz
+
+# Kiro / local agent tooling
+.kiro/
+.freebuff/
